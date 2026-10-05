@@ -2,7 +2,7 @@ const { chat, getCapabilities } = require('../out/core/llm/ollama');
 const { cleanCode, matchIndentation } = require('../out/core/llm/extract');
 const { SYSTEM_PROMPT, buildUserPrompt } = require('../out/hosts/app/refactor/prompts');
 
-const MODEL = process.argv[2] || 'qwen3.6:35b-a3b-coding';
+const MODEL = process.argv[2] || 'qwen2.5-coder:7b-instruct';
 
 const CASES = [
   {

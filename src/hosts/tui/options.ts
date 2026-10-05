@@ -31,7 +31,7 @@ const DEFAULTS: Omit<Options, 'root' | 'extraRoots'> = {
   projectsDir: PROJECTS_DIR,
   continue: false,
   endpoint: 'http://localhost:11434',
-  model: 'qwen3.6:35b-a3b-coding',
+  model: 'qwen2.5-coder:7b-instruct',
   keepAlive: '30m',
   chatMaxTokens: 2048,
   chatTemperature: 0.3,

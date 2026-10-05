@@ -210,7 +210,7 @@ interface ModelTarget {
 function refactorModel(cfg: vscode.WorkspaceConfiguration): ModelTarget {
   return {
     endpoint: cfg.get<string>('endpoint', 'http://localhost:11434'),
-    model: cfg.get<string>('refactorModel', 'qwen3.6:35b-a3b-coding'),
+    model: cfg.get<string>('refactorModel', 'qwen2.5-coder:7b-instruct'),
   };
 }
 

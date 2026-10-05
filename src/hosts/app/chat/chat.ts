@@ -339,7 +339,7 @@ export class ChatPanel {
 
   private model(): string {
     const cfg = vscode.workspace.getConfiguration('localAITab');
-    return cfg.get<string>('chatModel', '') || cfg.get<string>('refactorModel', 'qwen3.6:35b-a3b-coding');
+    return cfg.get<string>('chatModel', '') || cfg.get<string>('refactorModel', 'qwen2.5-coder:7b-instruct');
   }
 
   /**

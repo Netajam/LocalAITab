@@ -321,7 +321,7 @@
         },
         "localAITab.refactorModel": {
           "type": "string",
-          "default": "qwen3.6:35b-a3b-coding",
+          "default": "qwen2.5-coder:7b-instruct",
           "description": "Model used for Refactor Selection, Chat, Agent and Search planning. Must be an *instruct* model, not a base model."
         },
         "localAITab.refactorModelFallbacks": {

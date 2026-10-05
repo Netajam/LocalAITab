@@ -1,5 +1,5 @@
 const { chatStream, chatWithTools, getCapabilities } = require('../out/core/llm/ollama');
-const M = 'qwen3.6:35b-a3b-coding';
+const M = 'qwen2.5-coder:7b-instruct';
 const SYS = 'You are a coding assistant. Be brief.';
 
 const T1 = 'I am refactoring a class called CompletionCache. Remember that name.';

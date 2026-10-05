@@ -20,9 +20,14 @@ code --install-extension Netajam.localaitab
 ## Requires
 
 ```bash
-ollama pull qwen2.5-coder:3b-base    # completion: must be a -base tag (FIM)
-ollama pull qwen3.6:35b-a3b-coding   # refactor: must be an instruct model
+ollama pull qwen2.5-coder:3b-base       # completion: must be a -base tag (FIM)
+ollama pull qwen2.5-coder:7b-instruct   # refactor: must be an instruct model
 ```
+
+Together they need about 7 GB, which suits a 16 GB machine. With 32 GB or
+more, a larger instruct model gives noticeably better refactors and chat:
+`ollama pull qwen3.6:35b-a3b-coding` (about 24 GB) and pick it with
+**LocalAITab: Select Model...**.
 
 The two roles need different kinds of model. A `-base` tag completes text and
 cannot follow instructions; an instruct tag follows instructions but replies in
