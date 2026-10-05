@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.0
+
+- Refactor, chat and agent now default to `qwen2.5-coder:7b-instruct`, which
+  runs on a 16 GB machine. The previous default, `qwen3.6:35b-a3b-coding`, needs
+  about 32 GB; pick it with **LocalAITab: Select Model...** if you have the RAM.
+  If you already set `localAITab.refactorModel`, nothing changes for you.
+
 ## 0.11.0
 
 First Marketplace release.
