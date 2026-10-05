@@ -1,0 +1,16 @@
+.vscode/**
+src/**
+**/*.ts
+**/*.map
+tsconfig.json
+node_modules/**
+!media/**
+out/hosts/tui/**
+install-tui.sh
+test/**
+.scratch/**
+.claude/**
+.gitignore
+install.sh
+*.vsix
+.localaitab/**

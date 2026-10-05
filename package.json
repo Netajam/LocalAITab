@@ -1,0 +1,523 @@
+{
+  "name": "localaitab",
+  "displayName": "LocalAITab",
+  "description": "On-demand local FIM completion and selection refactoring, backed by Ollama.",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0f2a3d",
+    "theme": "dark"
+  },
+  "version": "0.11.0",
+  "publisher": "Netajam",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Netajam/LocalAITab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Netajam/LocalAITab/issues"
+  },
+  "homepage": "https://github.com/Netajam/LocalAITab#readme",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "ollama",
+    "local",
+    "offline",
+    "completion",
+    "fim",
+    "autocomplete",
+    "refactor",
+    "chat",
+    "qwen",
+    "llm"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/hosts/app/extension.js",
+  "bin": {
+    "localaitab": "./out/hosts/tui/main.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "localAITab.triggerOnce",
+        "title": "LocalAITab: Suggest Completion Here"
+      },
+      {
+        "command": "localAITab.refactor",
+        "title": "LocalAITab: Refactor Selection..."
+      },
+      {
+        "command": "localAITab.toggle",
+        "title": "LocalAITab: Toggle Autocomplete"
+      },
+      {
+        "command": "localAITab.toggleTriggerMode",
+        "title": "LocalAITab: Switch Between Manual and Automatic"
+      },
+      {
+        "command": "localAITab.showStats",
+        "title": "LocalAITab: Show Stats"
+      },
+      {
+        "command": "localAITab.diagnose",
+        "title": "LocalAITab: Diagnose"
+      },
+      {
+        "command": "localAITab.selectModel",
+        "title": "LocalAITab: Select Model..."
+      },
+      {
+        "command": "localAITab.applyRefactor",
+        "title": "LocalAITab: Apply Proposed Refactor",
+        "icon": "$(check)"
+      },
+      {
+        "command": "localAITab.discardRefactor",
+        "title": "LocalAITab: Discard Proposed Refactor",
+        "icon": "$(close)"
+      },
+      {
+        "command": "localAITab.improve",
+        "title": "LocalAITab: Make This Better"
+      },
+      {
+        "command": "localAITab.refactorWithContext",
+        "title": "LocalAITab: Refactor Selection (choose context)..."
+      },
+      {
+        "command": "localAITab.chat",
+        "title": "LocalAITab: Open Chat",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "localAITab.chatNewSession",
+        "title": "LocalAITab: New Chat Session"
+      },
+      {
+        "command": "localAITab.chatHistory",
+        "title": "LocalAITab: Resume Chat Session..."
+      },
+      {
+        "command": "localAITab.chatAttach",
+        "title": "LocalAITab: Attach File to Chat"
+      },
+      {
+        "command": "localAITab.chatPinSelection",
+        "title": "LocalAITab: Pin Selection to Chat",
+        "icon": "$(pinned)"
+      },
+      {
+        "command": "localAITab.newSkill",
+        "title": "LocalAITab: New Skill"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "localAITab.triggerOnce",
+        "key": "ctrl+k a",
+        "mac": "cmd+k a",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "command": "localAITab.refactor",
+        "key": "ctrl+k r",
+        "mac": "cmd+k r",
+        "when": "editorTextFocus && editorHasSelection && !editorReadonly"
+      },
+      {
+        "command": "localAITab.improve",
+        "key": "ctrl+k b",
+        "mac": "cmd+k b",
+        "when": "editorTextFocus && editorHasSelection && !editorReadonly"
+      },
+      {
+        "command": "localAITab.chat",
+        "key": "ctrl+k c",
+        "mac": "cmd+k q",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "localAITab.chatPinSelection",
+        "key": "ctrl+k l",
+        "mac": "cmd+k l",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "localAITab.applyRefactor",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "localAITab.hasPendingRefactor && resourceScheme == 'localaitab-refactor'"
+      },
+      {
+        "command": "localAITab.discardRefactor",
+        "key": "escape",
+        "mac": "escape",
+        "when": "localAITab.hasPendingRefactor && resourceScheme == 'localaitab-refactor' && !suggestWidgetVisible && !findWidgetVisible"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "localAITab.improve",
+          "when": "editorHasSelection",
+          "group": "1_modification@98"
+        },
+        {
+          "command": "localAITab.refactor",
+          "when": "editorHasSelection",
+          "group": "1_modification@99"
+        },
+        {
+          "command": "localAITab.chatPinSelection",
+          "when": "editorHasSelection",
+          "group": "localAITab@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "localAITab.chatAttach",
+          "when": "resourceScheme == 'file' && !explorerResourceIsFolder",
+          "group": "localAITab@1"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "localAITab.chatAttach",
+          "when": "resourceScheme == 'file'",
+          "group": "localAITab@1"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "localAITab.applyRefactor",
+          "when": "localAITab.hasPendingRefactor && resourceScheme == 'localaitab-refactor'",
+          "group": "navigation@1"
+        },
+        {
+          "command": "localAITab.discardRefactor",
+          "when": "localAITab.hasPendingRefactor && resourceScheme == 'localaitab-refactor'",
+          "group": "navigation@2"
+        },
+        {
+          "command": "localAITab.chat",
+          "when": "resourceScheme == 'file'",
+          "group": "navigation@99"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "localAITab.applyRefactor",
+          "when": "localAITab.hasPendingRefactor"
+        },
+        {
+          "command": "localAITab.discardRefactor",
+          "when": "localAITab.hasPendingRefactor"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "LocalAITab",
+      "properties": {
+        "localAITab.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline completions."
+        },
+        "localAITab.trigger": {
+          "type": "string",
+          "default": "manual",
+          "enum": [
+            "manual",
+            "automatic"
+          ],
+          "enumDescriptions": [
+            "Only suggest when explicitly asked (Cmd+K A / Ctrl+K A).",
+            "Suggest continuously as you type."
+          ],
+          "description": "When inline completions are offered."
+        },
+        "localAITab.endpoint": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Ollama base URL."
+        },
+        "localAITab.model": {
+          "type": "string",
+          "default": "qwen2.5-coder:3b-base",
+          "description": "Completion model. Must be a FIM-capable *base* model."
+        },
+        "localAITab.debounceMs": {
+          "type": "number",
+          "default": 300,
+          "description": "Idle time before firing a request. Ignored in manual mode."
+        },
+        "localAITab.temperature": {
+          "type": "number",
+          "default": 0.1
+        },
+        "localAITab.maxTokens": {
+          "type": "number",
+          "default": 256,
+          "description": "num_predict cap per completion."
+        },
+        "localAITab.prefixChars": {
+          "type": "number",
+          "default": 3000,
+          "description": "Chars of context before the cursor."
+        },
+        "localAITab.suffixChars": {
+          "type": "number",
+          "default": 1500,
+          "description": "Chars of context after the cursor."
+        },
+        "localAITab.multiline": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "always",
+            "never"
+          ],
+          "description": "auto = multi-line unless real code follows the cursor."
+        },
+        "localAITab.neighborFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include other open tabs as repo-level FIM context."
+        },
+        "localAITab.neighborBudget": {
+          "type": "number",
+          "default": 2000,
+          "description": "Total chars borrowed from neighbor files."
+        },
+        "localAITab.keepAlive": {
+          "type": "string",
+          "default": "30m",
+          "description": "Keeps models resident in Ollama between requests."
+        },
+        "localAITab.timeoutMs": {
+          "type": "number",
+          "default": 10000,
+          "description": "Abort a completion that takes longer than this. Cold model loads can take a second or two."
+        },
+        "localAITab.disabledLanguages": {
+          "type": "array",
+          "default": [
+            "plaintext",
+            "markdown",
+            "scminput"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "localAITab.refactorModel": {
+          "type": "string",
+          "default": "qwen3.6:35b-a3b-coding",
+          "description": "Model used for Refactor Selection, Chat, Agent and Search planning. Must be an *instruct* model, not a base model."
+        },
+        "localAITab.refactorModelFallbacks": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Ordered instruct models to offer when refactorModel is not installed on this machine. The first one that is installed is proposed; if none are, the largest installed instruct (non -base) model is proposed. You are always asked before a substitute is used."
+        },
+        "localAITab.refactorPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a before/after diff before applying a refactor."
+        },
+        "localAITab.refactorTemperature": {
+          "type": "number",
+          "default": 0.2
+        },
+        "localAITab.refactorMaxTokens": {
+          "type": "number",
+          "default": 2048
+        },
+        "localAITab.refactorContextChars": {
+          "type": "number",
+          "default": 2000,
+          "description": "Chars of surrounding file sent with the selection. 0 disables."
+        },
+        "localAITab.refactorContext": {
+          "type": "string",
+          "default": "surrounding",
+          "enum": [
+            "none",
+            "surrounding",
+            "file",
+            "openTabs"
+          ],
+          "enumDescriptions": [
+            "Selection only. Fastest, no surrounding code.",
+            "A window of characters either side of the selection (localAITab.refactorContextChars).",
+            "The whole current file, with the selection marked.",
+            "The whole current file plus other open tabs of the same language."
+          ],
+          "description": "How much context refactor and improve commands send to the model."
+        },
+        "localAITab.refactorNeighborBudget": {
+          "type": "number",
+          "default": 6000,
+          "description": "Chars borrowed from other open tabs when refactorContext is \"openTabs\"."
+        },
+        "localAITab.verifyAttempts": {
+          "type": "number",
+          "default": 1,
+          "description": "How many times Make This Better may feed its own errors back to the model to repair them. 0 disables repair."
+        },
+        "localAITab.verifyTimeoutMs": {
+          "type": "number",
+          "default": 4000,
+          "description": "How long to wait for the language server to republish diagnostics after an edit."
+        },
+        "localAITab.chatModel": {
+          "type": "string",
+          "default": "",
+          "description": "Model for the chat panel. Empty falls back to localAITab.refactorModel. Must be an instruct model."
+        },
+        "localAITab.chatTemperature": {
+          "type": "number",
+          "default": 0.3
+        },
+        "localAITab.chatMaxTokens": {
+          "type": "number",
+          "default": 2048
+        },
+        "localAITab.chatHistoryTurns": {
+          "type": "number",
+          "default": 8,
+          "description": "Conversation turns kept before the oldest are dropped."
+        },
+        "localAITab.skillPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".localaitab/skills",
+            "~/.localaitab/skills"
+          ],
+          "description": "Folders holding skills, one subfolder with a SKILL.md per skill. Relative paths are resolved against the workspace; ~ is your home directory. Earlier entries win when two skills share a name. A skills.json beside a folder (e.g. .localaitab/skills.json) can reference skills kept elsewhere, such as Claude Code's, without copying them: {\"skills\": [\"~/.agents/skills/tdd\", {\"path\": \"~/.claude/skills/review\", \"model\": false}]}. \"model\": false keeps a skill out of the model's list; it still runs as /name."
+        },
+        "localAITab.extraFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "application",
+          "markdownDescription": "Folders outside the workspace that agent mode may read, search and stage edits in, as absolute paths or starting with `~/`. User settings only, so a repository's own settings cannot grant itself access to your files. `/allow` in the chat grants a folder until the panel closes."
+        },
+        "localAITab.chatThinking": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow reasoning models to think before answering in chat. Slower, sometimes better."
+        },
+        "localAITab.agentMaxSteps": {
+          "type": "number",
+          "default": 8,
+          "description": "Hard cap on tool-calling steps in agent mode. The loop stops here regardless of what the model wants."
+        },
+        "localAITab.agentTemperature": {
+          "type": "number",
+          "default": 0.2
+        },
+        "localAITab.agentMaxReadChars": {
+          "type": "number",
+          "default": 12000,
+          "description": "Maximum characters read_file returns before truncating."
+        },
+        "localAITab.agentMaxSearchLines": {
+          "type": "number",
+          "default": 25,
+          "description": "Maximum match lines the search tool returns."
+        },
+        "localAITab.operatorMaxSteps": {
+          "type": "number",
+          "default": 30,
+          "description": "Hard cap on tool-calling steps in operator mode. Higher than agent mode, since a run can edit, build and fix in a loop."
+        },
+        "localAITab.operatorTemperature": {
+          "type": "number",
+          "default": 0.2
+        },
+        "localAITab.operatorCommandTimeout": {
+          "type": "number",
+          "default": 120,
+          "description": "Seconds an operator-mode shell command may run before it is killed."
+        },
+        "localAITab.operatorMaxOutputChars": {
+          "type": "number",
+          "default": 8000,
+          "description": "Maximum characters of a command's output handed back to the model. The head and tail are kept."
+        },
+        "localAITab.planGlobs": {
+          "type": "string",
+          "default": "!{node_modules,.git,dist,build,out,target}/**",
+          "description": "Default ripgrep glob for search planning."
+        },
+        "localAITab.planMaxSymbols": {
+          "type": "number",
+          "default": 160,
+          "description": "Identifiers sampled from the codebase and shown to the planner. Raising this improves query quality on large or unusually-named projects."
+        },
+        "localAITab.planContextLines": {
+          "type": "number",
+          "default": 4,
+          "description": "Lines of surrounding code attached either side of a ticked hit."
+        },
+        "localAITab.planMaxHitsPerFile": {
+          "type": "number",
+          "default": 6
+        },
+        "localAITab.planMaxFiles": {
+          "type": "number",
+          "default": 20
+        },
+        "localAITab.planTemperature": {
+          "type": "number",
+          "default": 0.2
+        },
+        "localAITab.chatContextPercent": {
+          "type": "number",
+          "default": 60,
+          "description": "Share of the running context window that attached context may use. The rest is left for the conversation and the reply. Ignored when chatContextTokens is set."
+        },
+        "localAITab.chatContextTokens": {
+          "type": "number",
+          "default": 0,
+          "description": "Absolute token cap on attached context. 0 derives it from chatContextPercent and the model’s running window."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "rm -rf out && npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "tui": "node out/hosts/tui/main.js",
+    "test": "node test/check.js && node test/session-format.js && node test/markdown.js && node test/commands.js && node test/skills.js && node test/workspace-paths.js && node test/access.js && node test/conversation.js && node test/tui-editor.js && node test/tui-parts.js && node test/transcripts.js && node test/live.js",
+    "e2e": "node test/e2e.js",
+    "install-all": "./install.sh",
+    "install-tui": "./install-tui.sh",
+    "uninstall-tui": "./install-tui.sh --uninstall",
+    "e2e:continuity": "node test/continuity-e2e.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.6.0"
+  }
+}
